@@ -67,25 +67,5 @@ namespace VAuth
             }
             return nearest;
         }
-
-        public void Balance()
-        {
-            int minimumSize = Int32.MaxValue;
-            foreach(VoiceIdentity identity in identities.Values)
-            {
-                if (identity.Size < minimumSize)
-                    minimumSize = identity.Size;
-            }
-            foreach (VoiceIdentity identity in identities.Values)
-            {
-                identity.Cut(minimumSize);
-            }
-        }
-
-        public void Normalize()
-        {
-            foreach (VoiceIdentity identity in identities.Values)
-                identity.Normalize();
-        }
     }
 }
