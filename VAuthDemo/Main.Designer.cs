@@ -33,16 +33,12 @@
             this.comboWaveInDevice = new System.Windows.Forms.ComboBox();
             this.deviceTimer = new System.Windows.Forms.Timer(this.components);
             this.labelDevice = new System.Windows.Forms.Label();
-            this.playButton = new System.Windows.Forms.Button();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.passwordLabel = new System.Windows.Forms.Label();
             this.usernameLabel = new System.Windows.Forms.Label();
             this.usernameTextBox = new System.Windows.Forms.TextBox();
             this.saveButton = new System.Windows.Forms.Button();
             this.authButton = new System.Windows.Forms.Button();
-            this.testVoxCeleb = new System.Windows.Forms.Button();
-            this.voxPathTextBox = new System.Windows.Forms.TextBox();
-            this.voxLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // recordButton
@@ -78,16 +74,6 @@
             this.labelDevice.TabIndex = 2;
             this.labelDevice.Text = "Device:";
             // 
-            // playButton
-            // 
-            this.playButton.Location = new System.Drawing.Point(18, 119);
-            this.playButton.Name = "playButton";
-            this.playButton.Size = new System.Drawing.Size(75, 23);
-            this.playButton.TabIndex = 3;
-            this.playButton.Text = "Play";
-            this.playButton.UseVisualStyleBackColor = true;
-            this.playButton.Click += new System.EventHandler(this.playButton_Click);
-            // 
             // passwordTextBox
             // 
             this.passwordTextBox.Location = new System.Drawing.Point(189, 122);
@@ -122,7 +108,7 @@
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(18, 148);
+            this.saveButton.Location = new System.Drawing.Point(18, 122);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 8;
@@ -132,7 +118,7 @@
             // 
             // authButton
             // 
-            this.authButton.Location = new System.Drawing.Point(18, 177);
+            this.authButton.Location = new System.Drawing.Point(18, 148);
             this.authButton.Name = "authButton";
             this.authButton.Size = new System.Drawing.Size(75, 23);
             this.authButton.TabIndex = 9;
@@ -140,48 +126,17 @@
             this.authButton.UseVisualStyleBackColor = true;
             this.authButton.Click += new System.EventHandler(this.authButton_Click);
             // 
-            // testVoxCeleb
-            // 
-            this.testVoxCeleb.Location = new System.Drawing.Point(18, 206);
-            this.testVoxCeleb.Name = "testVoxCeleb";
-            this.testVoxCeleb.Size = new System.Drawing.Size(75, 23);
-            this.testVoxCeleb.TabIndex = 12;
-            this.testVoxCeleb.Text = "VoxCeleb";
-            this.testVoxCeleb.UseVisualStyleBackColor = true;
-            this.testVoxCeleb.Click += new System.EventHandler(this.testVoxCeleb_Click);
-            // 
-            // voxPathTextBox
-            // 
-            this.voxPathTextBox.Location = new System.Drawing.Point(189, 208);
-            this.voxPathTextBox.Name = "voxPathTextBox";
-            this.voxPathTextBox.Size = new System.Drawing.Size(117, 20);
-            this.voxPathTextBox.TabIndex = 11;
-            this.voxPathTextBox.Text = "E:\\Desktop\\Jobs\\Voice Authentication\\Research\\vox1_test_wav\\wav";
-            // 
-            // voxLabel
-            // 
-            this.voxLabel.AutoSize = true;
-            this.voxLabel.Location = new System.Drawing.Point(117, 211);
-            this.voxLabel.Name = "voxLabel";
-            this.voxLabel.Size = new System.Drawing.Size(28, 13);
-            this.voxLabel.TabIndex = 10;
-            this.voxLabel.Text = "Vox:";
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(321, 248);
-            this.Controls.Add(this.testVoxCeleb);
-            this.Controls.Add(this.voxPathTextBox);
-            this.Controls.Add(this.voxLabel);
+            this.ClientSize = new System.Drawing.Size(321, 186);
             this.Controls.Add(this.authButton);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.usernameTextBox);
             this.Controls.Add(this.usernameLabel);
             this.Controls.Add(this.passwordLabel);
             this.Controls.Add(this.passwordTextBox);
-            this.Controls.Add(this.playButton);
             this.Controls.Add(this.labelDevice);
             this.Controls.Add(this.comboWaveInDevice);
             this.Controls.Add(this.recordButton);
@@ -200,16 +155,12 @@
         private System.Windows.Forms.ComboBox comboWaveInDevice;
         private System.Windows.Forms.Timer deviceTimer;
         private System.Windows.Forms.Label labelDevice;
-        private System.Windows.Forms.Button playButton;
         private System.Windows.Forms.TextBox passwordTextBox;
         private System.Windows.Forms.Label passwordLabel;
         private System.Windows.Forms.Label usernameLabel;
         private System.Windows.Forms.TextBox usernameTextBox;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button authButton;
-        private System.Windows.Forms.Button testVoxCeleb;
-        private System.Windows.Forms.TextBox voxPathTextBox;
-        private System.Windows.Forms.Label voxLabel;
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿// this file is copied from: https://github.com/naudio/NAudio/tree/master/NAudioDemo/RecordingDemo
+using NAudio.Wave;
 using System;
 
 namespace VAuthDemo

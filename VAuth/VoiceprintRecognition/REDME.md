@@ -1,0 +1,1 @@
+﻿# This directory is fully copied from https://github.com/Featherlet/VoiceprintRecognition
