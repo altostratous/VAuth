@@ -1,5 +1,6 @@
 ﻿using Google.Apis.Auth.OAuth2;
 using Google.Apis.Util.Store;
+using Google.Cloud.Speech.V1;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using System;
@@ -16,23 +17,44 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VAuth;
+using Grpc.Auth;
 
 namespace VAuthDemo
 {
     public partial class Main : Form
     {
         private CodeBook codeBook = new CodeBook();
+        private SpeechClient speechClient;
         private WaveIn recorder;
         private BufferedWaveProvider bufferedWaveProvider;
         private SavingWaveProvider savingWaveProvider;
         private WaveOut player;
         private double authenticationThreshold = 8;
+
+        private List<string> speechToText(string waveFileName)
+        {
+            var response = speechClient.Recognize(new RecognitionConfig()
+            {
+                Encoding = RecognitionConfig.Types.AudioEncoding.Linear16,
+                LanguageCode = "fa",
+            }, RecognitionAudio.FromFile(waveFileName));
+            List<string> results = new List<string>();
+            foreach (var result in response.Results)
+            {
+                foreach (var alternative in result.Alternatives)
+                {
+                    results.Add(alternative.Transcript);
+                }
+            }
+            return results;
+        }
+
         public Main()
         {
             InitializeComponent();
 
-            UserCredential credential;
-            credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+            UserCredential userCredential;
+            userCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                 new ClientSecrets
                 {
                     ClientId = "951192255070-c1393soeosq20o30nua8o734cjc8p3vm.apps.googleusercontent.com",
@@ -41,6 +63,15 @@ namespace VAuthDemo
                 new[] { "https://www.googleapis.com/auth/cloud-platform" },
                 "user", CancellationToken.None, new FileDataStore("VAuth.Credentials")
             ).Result;
+
+            
+            var channel = new Grpc.Core.Channel(
+                SpeechClient.DefaultEndpoint.Host,
+                GoogleCredential.FromAccessToken(userCredential.Token.AccessToken).ToChannelCredentials()
+            );
+
+
+            speechClient = SpeechClient.Create(channel);
 
 
             foreach (string folderName in Directory.GetDirectories("."))
@@ -92,10 +123,16 @@ namespace VAuthDemo
             savingWaveProvider.Dispose();
 
             // tell the user
-            recordButton.Text = "Hold To Record";
+            recordButton.Text = "Recognizing ...";
+            Application.DoEvents();
 
             // perform google speech to text
-            // VAuth.Commons.SpeechToText("temp.wav");
+            List<string> results = speechToText("temp.wav");
+            if (results.Count > 0)
+                passwordTextBox.Text = results[0];
+
+            // tell the user
+            recordButton.Text = "Hold To Record";
         }
 
         private void deviceTimer_Tick(object sender, EventArgs e)

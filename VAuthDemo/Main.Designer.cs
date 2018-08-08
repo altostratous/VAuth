@@ -171,7 +171,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(321, 256);
+            this.ClientSize = new System.Drawing.Size(321, 248);
             this.Controls.Add(this.testVoxCeleb);
             this.Controls.Add(this.voxPathTextBox);
             this.Controls.Add(this.voxLabel);
