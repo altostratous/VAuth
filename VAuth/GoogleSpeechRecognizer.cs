@@ -44,33 +44,42 @@ namespace VAuth
         /// <returns></returns>
         public List<string> SpeechToText(string waveFileName)
         {
-            // call Google API
-            var response = speechClient.Recognize(
-                // with this specific configuration
-                new RecognitionConfig()
-                {
-                    // specifying that the file format is linear (wave),
-                    Encoding = RecognitionConfig.Types.AudioEncoding.Linear16,
-                    // and specifying the language of the voice
-                    LanguageCode = languageCode,
-                },
-                // pass the audio file to be recognized 
-                RecognitionAudio.FromFile(waveFileName)
-            );
 
             // the collection to put results inside
             List<string> results = new List<string>();
 
-            // for each result returened from Google
-            foreach (var result in response.Results)
+            try
             {
-                // for each text alternation
-                foreach (var alternative in result.Alternatives)
+                // call Google API
+                var response = speechClient.Recognize(
+                    // with this specific configuration
+                    new RecognitionConfig()
+                    {
+                    // specifying that the file format is linear (wave),
+                    Encoding = RecognitionConfig.Types.AudioEncoding.Linear16,
+                    // and specifying the language of the voice
+                    LanguageCode = languageCode,
+                    },
+                    // pass the audio file to be recognized 
+                    RecognitionAudio.FromFile(waveFileName)
+                );
+
+                // for each result returened from Google
+                foreach (var result in response.Results)
                 {
-                    // add the text to results
-                    results.Add(alternative.Transcript);
+                    // for each text alternation
+                    foreach (var alternative in result.Alternatives)
+                    {
+                        // add the text to results
+                        results.Add(alternative.Transcript);
+                    }
                 }
+            } catch
+            {
+                // if something went wrong just rais an error
+                throw new Exception("Could not perform Google voice recognition.");
             }
+
             // return the results
             return results;
         }

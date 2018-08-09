@@ -15,6 +15,9 @@ namespace VAuth
         // list of identities stored in the model
         private Dictionary<string, VoiceIdentity> identities;
 
+        // the threshold for identification
+        private double threhold;
+
         // the speech recognizer used by this model to authenticate input voice
         private ISpeechRecognizer speechRecognizer;
 
@@ -22,12 +25,16 @@ namespace VAuth
         /// Creates a new CoodeBook using a speech recognizer.
         /// </summary>
         /// <param name="speechRecognizer">The speech recognizer used by the CoodBook to authenticate</param>
-        public CodeBook(ISpeechRecognizer speechRecognizer)
+        /// <param name="authenticationThreshold">The distance upper bound used to authenticate</param>
+        public CodeBook(ISpeechRecognizer speechRecognizer, double authenticationThreshold)
         {
             // initialize identities
             this.identities = new Dictionary<string, VoiceIdentity>();
             // just set the recognizer
             this.speechRecognizer = speechRecognizer;
+
+            // set the threshold
+            this.threhold = authenticationThreshold;
         }
 
         /// <summary>
@@ -102,7 +109,7 @@ namespace VAuth
 
             // initially set the result to null
             VoiceIdentity nearest = null;
-            // find the identity with the same password and least distance
+            // find the identity with the same password and least distance meeting the threshold
             double leastDistance = Double.MaxValue;
             foreach (VoiceIdentity identity in identities.Values)
             {
@@ -110,7 +117,9 @@ namespace VAuth
                     continue;
                 // calculate input file distance from the identity
                 double distance = identity.Distance(waveFileName);
-                Console.WriteLine(distance);
+                // if it is more than threshold go to next identity
+                if (distance > threhold)
+                    continue;
                 if (distance < leastDistance)
                 {
                     nearest = identity;

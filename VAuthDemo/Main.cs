@@ -56,25 +56,28 @@ namespace VAuthDemo
 
             // this is copied from https://developers.google.com/api-client-library/dotnet/guide/aaa_oauth
             UserCredential userCredential;
-            userCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                new ClientSecrets
-                {
-                    ClientId = "951192255070-c1393soeosq20o30nua8o734cjc8p3vm.apps.googleusercontent.com",
-                    ClientSecret = "R8bxbr1XQVLCAuU8vtl6Hy-u"
-                },
-                // the scope used for Google Cloud Speech recognition
-                new[] { "https://www.googleapis.com/auth/cloud-platform" },
-                "user", CancellationToken.None, dataStore
-            ).Result;
+            try {
+                userCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    new ClientSecrets
+                    {
+                        ClientId = "951192255070-c1393soeosq20o30nua8o734cjc8p3vm.apps.googleusercontent.com",
+                        ClientSecret = "R8bxbr1XQVLCAuU8vtl6Hy-u"
+                    },
+                    // the scope used for Google Cloud Speech recognition
+                    new[] { "https://www.googleapis.com/auth/cloud-platform" },
+                    "user", CancellationToken.None, dataStore
+                ).Result;
 
-            // write open authentication expiration time to a file to check on the next run. this helps not to authenticate again if the last one is valid. 
-            File.WriteAllText("expires_in.txt", userCredential.Token.ExpiresInSeconds.ToString());
+                // write open authentication expiration time to a file to check on the next run. this helps not to authenticate again if the last one is valid. 
+                File.WriteAllText("expires_in.txt", userCredential.Token.ExpiresInSeconds.ToString());
 
-            // create speech recognizer to pass to the codeBook
-            googleSpeechRecognizer = new GoogleSpeechRecognizer(GoogleCredential.FromAccessToken(userCredential.Token.AccessToken));
+                // create speech recognizer to pass to the codeBook
+                googleSpeechRecognizer = new GoogleSpeechRecognizer(GoogleCredential.FromAccessToken(userCredential.Token.AccessToken));
+            } catch { promptErrorAndExit("Could not authenticate with Google"); }
+
 
             // initialize codeBook with the speech recognizer
-            codeBook = new CodeBook(googleSpeechRecognizer);
+            codeBook = new CodeBook(googleSpeechRecognizer, authenticationThreshold);
 
             // for each folder next to the program, each folder contains MFCC files for a person
             foreach (string folderName in Directory.GetDirectories("."))
@@ -90,6 +93,16 @@ namespace VAuthDemo
                     File.ReadAllText(username + ".password")
                 );
             }
+        }
+
+        /// <summary>
+        /// Prompts error and exit on a critical error.
+        /// </summary>
+        /// <param name="message">The message to be shown</param>
+        private void promptErrorAndExit(string message)
+        {
+            MessageBox.Show("Error", message);
+            Application.Exit();
         }
 
         // Copied from: https://markheath.net/post/how-to-record-and-play-audio-at-same
@@ -116,7 +129,6 @@ namespace VAuthDemo
 
             // set up playback
             player = new WaveOut();
-            player.Volume = 0;
             player.Init(savingWaveProvider);
 
             // begin playback & record
@@ -147,12 +159,17 @@ namespace VAuthDemo
             // use this because we are in the UI thread
             Application.DoEvents();
 
-            // perform google speech to text
-            List<string> results = googleSpeechRecognizer.SpeechToText("temp.wav");
-            // if there is any results 
-            if (results.Count > 0)
-                // show the first one
-                passwordTextBox.Text = results[0];
+            try {
+                // perform google speech to text
+                List<string> results = googleSpeechRecognizer.SpeechToText("temp.wav");
+                // if there is any results 
+                if (results.Count > 0)
+                    // show the first one
+                    passwordTextBox.Text = results[0];
+            } catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
             // update record button status
             recordButton.Text = "Hold To Record";
@@ -182,31 +199,34 @@ namespace VAuthDemo
         private void saveButton_Click(object sender, EventArgs e)
         {
             string username = usernameTextBox.Text;
+            if (username == "")
+            {
+                MessageBox.Show("Username can't be empty!");
+                return;
+            }
             codeBook.Add(username, "temp.wav", passwordTextBox.Text);
         }
 
         // try to authenticate any user using the recorded voice
         private void authButton_Click(object sender, EventArgs e)
         {
-            // ask codebook to identify the voice (it also checks the password)
-            VoiceIdentity nearestIdentity = codeBook.Identify("temp.wav");
+            try {
+                // ask codebook to identify the voice (it also checks the password, and threshold)
+                VoiceIdentity nearestIdentity = codeBook.Identify("temp.wav");
 
-            // if no user is found
-            if (nearestIdentity == null)
-            {
-                // tell the failure
-                MessageBox.Show("Authentication Failed!");
-                return;
-            }
-
-            // if any user is identified by the codebook as the nearest voice, get the distance
-            double distance = nearestIdentity.Distance("temp.wav");
-            // if file total time is not that much and distance meets the threshold authenticate the user. 
-            // (impirically we found that big total times result in bad distance measures)
-            if (distance < authenticationThreshold && new AudioFileReader("temp.wav").TotalTime < new TimeSpan(0, 0, 5))
+                // if no user is found
+                if (nearestIdentity == null)
+                {
+                    // tell the failure
+                    MessageBox.Show("Authentication Failed!");
+                    return;
+                }
+                
                 MessageBox.Show("Welcome, " + nearestIdentity.Tag + "!");
-            else
-                MessageBox.Show("Authentication Failed!");
+            } catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void Main_Load(object sender, EventArgs e)
