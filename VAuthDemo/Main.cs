@@ -132,7 +132,7 @@ namespace VAuthDemo
             player.Init(savingWaveProvider);
 
             // begin playback & record
-            // player.Volume = 0;
+            player.Volume = 0;
             player.Play();
             recorder.StartRecording();
 
