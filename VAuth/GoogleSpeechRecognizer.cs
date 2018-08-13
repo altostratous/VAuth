@@ -74,10 +74,10 @@ namespace VAuth
                         results.Add(alternative.Transcript);
                     }
                 }
-            } catch
+            } catch (Exception ex)
             {
                 // if something went wrong just rais an error
-                throw new Exception("Could not perform Google voice recognition.");
+                throw new Exception("Could not perform Google voice recognition.", ex);
             }
 
             // return the results
