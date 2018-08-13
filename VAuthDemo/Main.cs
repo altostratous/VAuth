@@ -162,7 +162,7 @@ namespace VAuthDemo
                     passwordTextBox.Text = results[0];
             } catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                promptErrorAndExit(ex);
             }
 
             // update record button status
