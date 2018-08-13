@@ -73,7 +73,11 @@ namespace VAuthDemo
 
                 // create speech recognizer to pass to the codeBook
                 googleSpeechRecognizer = new GoogleSpeechRecognizer(GoogleCredential.FromAccessToken(userCredential.Token.AccessToken));
-            } catch { promptErrorAndExit("Could not authenticate with Google"); }
+            } catch (Exception ex)
+            {
+                promptErrorAndExit(ex);
+                return;
+            }
 
 
             // initialize codeBook with the speech recognizer
@@ -93,16 +97,6 @@ namespace VAuthDemo
                     File.ReadAllText(username + ".password")
                 );
             }
-        }
-
-        /// <summary>
-        /// Prompts error and exit on a critical error.
-        /// </summary>
-        /// <param name="message">The message to be shown</param>
-        private void promptErrorAndExit(string message)
-        {
-            MessageBox.Show("Error", message);
-            Application.Exit();
         }
 
         // Copied from: https://markheath.net/post/how-to-record-and-play-audio-at-same
@@ -225,8 +219,22 @@ namespace VAuthDemo
                 MessageBox.Show("Welcome, " + nearestIdentity.Tag + "!");
             } catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                promptErrorAndExit(ex);
             }
+        }
+
+        /// <summary>
+        /// Prompts general error and exits the program. 
+        /// </summary>
+        /// <param name="ex">The exception to be logged and showed.</param>
+        private void promptErrorAndExit(Exception ex)
+        {
+            MessageBox.Show(ex.Message);
+            StreamWriter logger = new StreamWriter("error.log", true);
+            logger.Write(ex.ToString());
+            logger.WriteLine();
+            logger.Close();
+            Environment.Exit(1);
         }
 
         private void Main_Load(object sender, EventArgs e)
