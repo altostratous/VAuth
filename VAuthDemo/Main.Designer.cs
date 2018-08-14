@@ -33,12 +33,12 @@
             this.comboWaveInDevice = new System.Windows.Forms.ComboBox();
             this.deviceTimer = new System.Windows.Forms.Timer(this.components);
             this.labelDevice = new System.Windows.Forms.Label();
-            this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.passwordLabel = new System.Windows.Forms.Label();
             this.usernameLabel = new System.Windows.Forms.Label();
             this.usernameTextBox = new System.Windows.Forms.TextBox();
             this.saveButton = new System.Windows.Forms.Button();
             this.authButton = new System.Windows.Forms.Button();
+            this.passwordComboBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // recordButton
@@ -73,13 +73,6 @@
             this.labelDevice.Size = new System.Drawing.Size(44, 13);
             this.labelDevice.TabIndex = 2;
             this.labelDevice.Text = "Device:";
-            // 
-            // passwordTextBox
-            // 
-            this.passwordTextBox.Location = new System.Drawing.Point(189, 122);
-            this.passwordTextBox.Name = "passwordTextBox";
-            this.passwordTextBox.Size = new System.Drawing.Size(117, 20);
-            this.passwordTextBox.TabIndex = 4;
             // 
             // passwordLabel
             // 
@@ -126,17 +119,25 @@
             this.authButton.UseVisualStyleBackColor = true;
             this.authButton.Click += new System.EventHandler(this.authButton_Click);
             // 
+            // passwordComboBox
+            // 
+            this.passwordComboBox.FormattingEnabled = true;
+            this.passwordComboBox.Location = new System.Drawing.Point(189, 122);
+            this.passwordComboBox.Name = "passwordComboBox";
+            this.passwordComboBox.Size = new System.Drawing.Size(117, 21);
+            this.passwordComboBox.TabIndex = 10;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(321, 186);
+            this.Controls.Add(this.passwordComboBox);
             this.Controls.Add(this.authButton);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.usernameTextBox);
             this.Controls.Add(this.usernameLabel);
             this.Controls.Add(this.passwordLabel);
-            this.Controls.Add(this.passwordTextBox);
             this.Controls.Add(this.labelDevice);
             this.Controls.Add(this.comboWaveInDevice);
             this.Controls.Add(this.recordButton);
@@ -155,12 +156,12 @@
         private System.Windows.Forms.ComboBox comboWaveInDevice;
         private System.Windows.Forms.Timer deviceTimer;
         private System.Windows.Forms.Label labelDevice;
-        private System.Windows.Forms.TextBox passwordTextBox;
         private System.Windows.Forms.Label passwordLabel;
         private System.Windows.Forms.Label usernameLabel;
         private System.Windows.Forms.TextBox usernameTextBox;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button authButton;
+        private System.Windows.Forms.ComboBox passwordComboBox;
     }
 }
 
