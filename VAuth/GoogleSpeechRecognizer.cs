@@ -55,10 +55,12 @@ namespace VAuth
                     // with this specific configuration
                     new RecognitionConfig()
                     {
-                    // specifying that the file format is linear (wave),
-                    Encoding = RecognitionConfig.Types.AudioEncoding.Linear16,
-                    // and specifying the language of the voice
-                    LanguageCode = languageCode,
+                        // specifying that the file format is linear (wave),
+                        Encoding = RecognitionConfig.Types.AudioEncoding.Linear16,
+                        // and specifying the language of the voice
+                        LanguageCode = languageCode,
+                        // set the sample rate
+                        SampleRateHertz = sampleRate(waveFileName)
                     },
                     // pass the audio file to be recognized 
                     RecognitionAudio.FromFile(waveFileName)
@@ -82,6 +84,19 @@ namespace VAuth
 
             // return the results
             return results;
+        }
+
+        /// <summary>
+        /// Gets the sample rate from wave file
+        /// </summary>
+        /// <param name="waveFileName">The path to the wave file</param>
+        /// <returns></returns>
+        private int sampleRate(string waveFileName)
+        {
+            using (var reader = new NAudio.Wave.AudioFileReader(waveFileName))
+            {
+                return reader.WaveFormat.SampleRate;
+            }
         }
     }
 }
