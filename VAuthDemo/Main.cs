@@ -129,7 +129,10 @@ namespace VAuthDemo
                     // show the first one
                     passwordComboBox.Items.Clear();
                     foreach (string result in results)
+                    {
                         passwordComboBox.Items.Add(result);
+                        passwordComboBox.SelectedIndex = 0;
+                    }
                 }
             } catch (Exception ex)
             {
