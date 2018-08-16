@@ -45,7 +45,12 @@ namespace VAuthDemo
             InitializeComponent();
 
             // create new windows speech recognizer
-            speechRecognizer = new WindowsSpeechRecognizer();
+            List<string> passwords = new List<string>();
+            foreach (string filename in Directory.GetFiles(".", "*.password"))
+            {
+                passwords.Add(File.ReadAllText(filename));
+            }
+            speechRecognizer = new WindowsSpeechRecognizer(passwords);
 
             // initialize codeBook with the speech recognizer
             codeBook = new CodeBook(speechRecognizer, authenticationThreshold);
@@ -133,6 +138,7 @@ namespace VAuthDemo
                         passwordComboBox.Items.Add(result);
                         passwordComboBox.SelectedIndex = 0;
                     }
+                    passwordComboBox.Text = results[0];
                 }
             } catch (Exception ex)
             {

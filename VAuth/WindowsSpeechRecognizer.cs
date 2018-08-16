@@ -6,6 +6,13 @@ namespace VAuth
 {
     public class WindowsSpeechRecognizer : ISpeechRecognizer
     {
+        private Grammar grammar;
+
+        public WindowsSpeechRecognizer(List<string> options)
+        {
+            this.grammar = new Grammar(new GrammarBuilder(new Choices(options.ToArray())));
+        }
+
         /// <summary>
         /// This is implementation of SpeechToText function using Windows speech recognition, for more information see ISpeechRecognizer.SpeechToText
         /// </summary>
@@ -22,19 +29,18 @@ namespace VAuth
                 // copied from here: https://stackoverflow.com/questions/25917966/speech-to-text-from-wav-file-c-sharp
                 using (var sre = new SpeechRecognitionEngine())
                 {
-                    sre.SetInputToWaveFile(waveFileName);
-                    sre.LoadGrammar(new DictationGrammar());
+                    sre.LoadGrammar(grammar);
 
-                    sre.BabbleTimeout = new TimeSpan(0, 0, 5);
-                    sre.InitialSilenceTimeout = new TimeSpan(0, 0, 5);
-                    sre.EndSilenceTimeout = new TimeSpan(0, 0, 5);
-                    sre.EndSilenceTimeoutAmbiguous = new TimeSpan(0, 0, 5);
+                    sre.SetInputToWaveFile(waveFileName);
 
                     var result = sre.Recognize();
+                    if (result == null)
+                        return results;
                     foreach (var alternative in result.Alternates)
                     {
                         results.Add(alternative.Text);
                     }
+                    sre.Dispose();
                 }
                 
             } catch (Exception ex)
