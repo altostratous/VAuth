@@ -63,13 +63,21 @@ namespace VAuthDemo
             }
         }
 
+        /// <summary>
+        /// Initialize the windows speech recognizer with a grammar of passwords
+        /// </summary>
         private void initializeSpeechRecognier()
         {
             List<string> passwords = new List<string>();
             foreach (string filename in Directory.GetFiles(".", "*.password"))
             {
-                passwords.Add(File.ReadAllText(filename));
+                string password = File.ReadAllText(filename);
+                if (!passwords.Contains(password))
+                    passwords.Add(password);
             }
+            // if there is no password yet add hello
+            if (passwords.Count == 0)
+                passwords.Add("hello");
             speechRecognizer = new WindowsSpeechRecognizer(passwords);
         }
 
