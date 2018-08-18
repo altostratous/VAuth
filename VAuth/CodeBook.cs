@@ -22,6 +22,11 @@ namespace VAuth
         private ISpeechRecognizer speechRecognizer;
 
         /// <summary>
+        /// The speech recognizer used with the codebook for 2 factor authentication
+        /// </summary>
+        public ISpeechRecognizer SpeechRecognizer { get { return speechRecognizer;  } set { speechRecognizer = value; } }
+
+        /// <summary>
         /// Creates a new CoodeBook using a speech recognizer.
         /// </summary>
         /// <param name="speechRecognizer">The speech recognizer used by the CoodBook to authenticate</param>

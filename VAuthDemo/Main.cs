@@ -79,6 +79,12 @@ namespace VAuthDemo
             if (passwords.Count == 0)
                 passwords.Add("hello");
             speechRecognizer = new WindowsSpeechRecognizer(passwords);
+            
+            // update the codebook's speech recognizer
+            if (codeBook != null)
+            {
+                codeBook.SpeechRecognizer = speechRecognizer;
+            }
         }
 
         // Copied from: https://markheath.net/post/how-to-record-and-play-audio-at-same
