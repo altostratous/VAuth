@@ -33,7 +33,7 @@ namespace VAuthDemo
         private WaveOut player;
 
         // The threshold under which voice is authenticated
-        private double authenticationThreshold = 14;
+        private double authenticationThreshold = 7;
 
 
         public Main()
