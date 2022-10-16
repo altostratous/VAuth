@@ -67,7 +67,4 @@ Speech recognition systems usually recognize multiple results as alternatives fo
 We have a class named `VoiceIdentity` which contains the password, tag and MFCC file adresses of the samples from a person. These are kept inside a `CodeBook` object which handles search and controlling stuff. 
 
 # Documentation
-The code has rich inline documentation. Here are some persion videos on how the project is done and how to use it as well. We will add english videos on demand as well.
-
-*  [Code Description](#)
-*  [Demo](#)
+The code has rich inline documentation. 
